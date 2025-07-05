@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[DA] Retificação de Erros</title>
+  <link rel="icon" type="image/x-icon" href="https://i.imgur.com/3f1qAHn.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      position: relative;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(45deg, #181818 15%, #293234 50%, #181818 75%);
+      background-size: 100% 150%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 15px;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    header {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+
+    header img {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 280px;
+      transition: all 0.3s ease-in-out;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+
+    header img:hover {
+      filter: brightness(1.1);
+    }
+
+    .wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 750px;
+      margin: 50px auto 0 auto;
+    }
+
+    .container {
+      position: relative;
+      background: #2A2A2A;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      padding: 30px;
+      text-align: center;
+      margin-top: 100px;
+      z-index: 1;
+    }
+
+    .tittle {
+      font-size: 28px;
+      font-weight: 800;
+      color: #C5A45B;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+
+    .intro {
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .options button {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #C5A45B, #2A2A2A);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .options button:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+
+    .card {
+      display: none;
+      background: #f8f8f8;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: left;
+    }
+
+    .card.active { display: block; }
+
+    .card h2 {
+      color: #181818;
+      margin-bottom: 20px;
+    }
+
+    .input-box {
+      margin-bottom: 20px;
+    }
+
+    .input-box span {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .input-box input,
+    .input-box textarea {
+      width: 100%;
+      background-color: #e7e7e7;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 15px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .input-box textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    .button input {
+      background: linear-gradient(90deg, #C5A45B, #2A2A2A);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 30px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .button input:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+
+  .toast-post {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: -100%;
+            background-color: rgba(0, 0, 0, 0.15);
+            border: 1px solid #00ff22;
+            color: white;
+            padding: 13px;
+            border-radius: 10px;
+            z-index: 9999;
+            text-align: center;
+            font-size: 15px;
+            max-width: 300px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .toast-post i {
+            animation: checkPop 0.6s ease;
+        }
+
+        @keyframes checkPop {
+            0% {
+                transform: scale(0);
+            }
+
+            80% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pontosBalanco {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-5px);
+            }
+
+            60% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .toast-post p::after {
+            content: "...";
+            display: inline-block;
+            animation: pontosBalanco 1.5s infinite;
+        }
+
+        @keyframes toastEntrada {
+            from {
+                right: -100%;
+                opacity: 0;
+            }
+
+            to {
+                right: 20px;
+                opacity: 1;
+            }
+        }
+
+        .toast.show,
+        .toast-post.show,
+        .toast-cargo.show {
+            opacity: 1;
+            display: flex;
+            animation: toastEntrada 0.5s ease forwards;
+        }
+
+        .toast-post i {
+            margin-right: 10px;
+            margin-bottom: -5px;
+            font-size: 20px;
+            color: rgb(46, 253, 0);
+        }
+
+          .toast-cargo {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: -100%;
+            background-color: rgba(0, 0, 0, 0.15);
+            border: 1px solid #e3e700;
+            color: white;
+            padding: 13px;
+            border-radius: 10px;
+            z-index: 9999;
+            text-align: center;
+            font-size: 15px;
+            max-width: 300px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .toast-cargo i {
+            margin-right: 10px;
+            margin-bottom: -5px;
+            font-size: 20px;
+            color: rgb(222, 196, 0);
+        }
+
+
+  </style>
+</head>
+
+<body>
+
+    <div id="toast-post" class="toast-post">
+        <p><i class="fa-solid fa-check-circle"></i> Sucesso! Redirecionando</p>
+    </div>
+
+
+  <div class="wrapper">
+    <header>
+      <img alt="Logo" src="https://i.imgur.com/3f1qAHn.png" />
+    </header>
+
+    <div class="container">
+      <h2 class="tittle">Retificação de Erros</h2>
+      <p class="intro"> Retificação de erros aos aplicadores que desejarem corrigir suas postagens errôneas nas aplicações.</p>
+      <div class="options">
+        <button onclick="showForm()">Prosseguir</button>
+      </div>
+
+      <div class="card">
+        <h2>Formulário de Retificação</h2>
+        <form action="https://script.google.com/macros/s/AKfycbwUqZXia3ki_WQsJb3nFuj6mo4PhBnMgRClVVWp6LcyCk5dmaB3VepO2d0G_icBdPQ/exec" method="POST">
+          <div class="input-box">
+           
+         <div class="input-box">
+            <span>Nick:</span>
+            <input type="text" name="nick" required placeholder="Insira seu nickname...">
+            </div>
+            <div class="input-box">
+            <span>Linha:</span>
+            <input type="text" name="periodo" required placeholder="Informe a linha. Ex: Linha 13 da coluna C. ">
+            </div>
+            <div class="input-box">
+            <span>Motivo:</span>
+            <textarea name="motivo" required placeholder="Explique da retificação/motivo da alteração..."></textarea>
+            </div>
+
+          </div>
+          <div class="button">
+            <input type="submit" value="Enviar Retificação">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+ <script>
+  function showForm() {
+    document.querySelector('.options').style.display = 'none';
+    document.querySelector('.intro').style.display = 'none';
+    document.querySelector('.card').classList.add('active');
+  }
+
+  const form = document.querySelector('form');
+  const toast = document.getElementById('toast-post');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const data = new FormData(form);
+
+    fetch(form.action, {
+      method: 'POST',
+      body: data
+    })
+    .then(() => {
+      // Mostra toast e redireciona mesmo sem analisar resposta
+      toast.style.display = 'flex';
+      toast.classList.add('show');
+
+      form.reset();
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        window.location.href = 'https://www.policiarcc.com/t37920-da-central-de-justificativas-retificacao-de-erros';
+      }, 2500);
+    })
+    .catch(() => {
+      alert('Erro na comunicação com o servidor. Tente novamente.');
+    });
+  });
+</script>
+</body>
+</html>
